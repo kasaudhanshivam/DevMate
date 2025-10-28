@@ -12,7 +12,7 @@ import { ScaleLoader } from "react-spinners";
 const ChatWindow = () => {
 
 
-  const serverURL = 'http://localhost:8000/api/';
+  const serverURL = 'https://devmate-hxfi.onrender.com/api/';
 
   const { prompt, setPrompt, reply, setReply, currThreadId, setCurrThreadId, prevChats, setPrevChats, setNewChat } = useContext(MyContext);
 

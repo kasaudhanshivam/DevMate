@@ -7,7 +7,7 @@ import { v1 as uuidv1 } from 'uuid';
 
 const Sidebar = () => {
 
-  const serverURL = 'http://localhost:8000/api/';
+  const serverURL = 'https://devmate-hxfi.onrender.com/api/';
 
   const { allThreads, setAllThreads, currThreadId, setCurrThreadId, setNewChat, setPrompt, setReply, setPrevChats } = useContext(MyContext);
 
