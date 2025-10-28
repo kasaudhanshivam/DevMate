@@ -1,6 +1,6 @@
 import './App.css'
-import ChatWindow from './components/chatWindow.jsx'
-import Sidebar from './components/sidebar.jsx'
+import ChatWindow from './components/ChatWindow.jsx'
+import Sidebar from './components/Sidebar.jsx'
 import {MyContext} from './MyContext.jsx'
 import {useState} from 'react'
 import {v1 as uuidv1} from 'uuid';
