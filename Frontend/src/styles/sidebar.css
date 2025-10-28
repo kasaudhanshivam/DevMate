@@ -1,0 +1,82 @@
+.sidebar{
+    background-color: #171717;
+    color: #b4b4b4;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 20vw;
+}
+
+.newChat{
+    background-color: #2a2a2a;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    transition: all 0.2s;
+}
+
+.newChat:hover{
+    background-color: #3a3a3a;
+    transition: background-color 0.2s;
+}
+
+.threads{
+    list-style-type: none;
+    padding: 0;
+    margin: 0 10px 10px 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    font-size: small;
+}
+
+.threads::-webkit-scrollbar {
+    display: none;
+}
+
+.threads li{
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.threads li:hover{
+    background-color: #2a2a2a;
+}
+
+.sign{
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+
+.fa-trash{
+    opacity: 0;
+    flex-grow: 1;
+}
+
+.threads li:hover .fa-trash{
+    opacity: 1;
+}
+
+.fa-trash:hover{
+    color: red!important;
+}
+
+
+.highlighted{
+    background-color: rgba(180, 180, 180, 0.1);
+    border-radius: 1.2rem;
+}
