@@ -1,30 +1,17 @@
 import express from 'express';
 import Thread from '../models/Thread.js';
 import geminiResponse from '../utils/gemini.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Create a new chat thread
-router.post('/test', async (req, res) => {
-    try {
-        const thread = new Thread({
-            threadId: "oijfifc",
-            title: "Sample for testing673",
-        })
-        const response = await thread.save();
-        res.json(response);
-    } catch (error) {
-        console.error("Error creating thread:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
 
+router.use(authenticate);
 
-// Get all chat threads
+// Get all chat threads FOR CURRENT USER ONLY
 router.get('/threads', async (req, res) => {
     try {
-        const threads = await Thread.find({}).sort({ updatedAt: -1 });
-        // descending order of updatedAt --- most recent data on top
+        const threads = await Thread.find({ user: req.user._id }).sort({ updatedAt: -1 });
         res.json(threads);
     } catch (error) {
         console.error("Error fetching threads:", error);
@@ -32,12 +19,11 @@ router.get('/threads', async (req, res) => {
     }
 });
 
-
-// Get chat messages for a specific thread
+// Get chat messages for a specific thread - ONLY IF USER OWNS IT
 router.get('/threads/:threadId', async (req, res) => {
     const { threadId } = req.params;
     try {
-        const thread = await Thread.findOne({ threadId });
+        const thread = await Thread.findOne({ threadId, user: req.user._id });
         if (!thread) {
             return res.status(404).json({ error: "Thread not found" });
         }
@@ -48,13 +34,11 @@ router.get('/threads/:threadId', async (req, res) => {
     }
 });
 
-
-
-// Delete a chat thread
+// Delete a chat thread - ONLY IF USER OWNS IT
 router.delete('/threads/:threadId', async (req, res) => {
     const { threadId } = req.params;
     try {
-        const thread = await Thread.findOneAndDelete({ threadId });
+        const thread = await Thread.findOneAndDelete({ threadId, user: req.user._id });
         if (!thread) {
             return res.status(404).json({ error: "Thread not found" });
         }
@@ -65,24 +49,23 @@ router.delete('/threads/:threadId', async (req, res) => {
     }
 });
 
-
-
-// New message to existing chat thread or a new chat thread
+// New message to existing chat thread or a new chat thread - ALWAYS LINK TO USER
 router.post('/chat', async (req, res) => {
     const { threadId, message } = req.body;
-
-    // console.log("Received message:", message, "for thread ID:", threadId);
 
     if (!threadId || !message) {
         return res.status(400).json({ error: "Fields are required" });
     }
 
     try {
-        let thread = await Thread.findOne({ threadId });
+        let thread = await Thread.findOne({ threadId, user: req.user._id });
+        
         if (!thread) {
+            // Create new thread WITH USER REFERENCE
             thread = new Thread({
                 threadId,
                 title: message,
+                user: req.user._id, // ADD THIS
                 messages: [{
                     role: "user",
                     content: message
@@ -94,7 +77,6 @@ router.post('/chat', async (req, res) => {
                 content: message
             });
         }
-
 
         const geminiReply = await geminiResponse(message);
         console.log("Gemini Reply:", geminiReply);
@@ -111,7 +93,6 @@ router.post('/chat', async (req, res) => {
         console.error("Error adding message:", error);
         res.status(500).json({ error: "Internal server error" });
     }
-
 });
 
 export default router;

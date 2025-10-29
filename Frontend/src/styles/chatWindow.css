@@ -111,3 +111,25 @@
 .dropDownItem:hover{
     background-color: rgba(180, 180, 180, 0.1);
 }
+
+
+
+
+/* Add to styles/chatWindow.css */
+.user-name {
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.navbar .user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+
+.navbar .user:hover {
+  background: rgba(255, 255, 255, 0.1);
+}

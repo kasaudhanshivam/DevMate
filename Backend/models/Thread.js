@@ -28,6 +28,11 @@ const ThreadSchema = new mongoose.Schema({
         type: String,
         default: "New Chat",
     },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     messages : [MessageSchema],
     createdAt : {
         type : Date,
