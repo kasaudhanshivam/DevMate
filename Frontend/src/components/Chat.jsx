@@ -36,7 +36,7 @@ const Chat = () => {
 
   return (
     <>
-      {newChat && <h1>How I can help you today?</h1>}
+      {newChat && <h1>Where should we begin?</h1>}
       <div className="chats">
         {
           prevChats?.slice(0, -1).map((chat, index) => (

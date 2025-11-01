@@ -1,3 +1,7 @@
+h1{
+    margin-top: 11rem;
+}
+
 .chats {
     flex-grow: 1;
     overflow-y: auto;

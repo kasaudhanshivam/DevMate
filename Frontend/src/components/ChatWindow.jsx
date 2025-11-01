@@ -6,6 +6,7 @@ import { MyContext } from '../MyContext.jsx';
 import { useState } from "react";
 import { ScaleLoader } from "react-spinners";
 import { useAuth } from '../contexts/AuthContext.jsx';
+import ModelSelector from './ModelSelector.jsx';
 
 const ChatWindow = () => {
   // const serverURL = 'http://localhost:8000/api/';
@@ -14,11 +15,12 @@ const ChatWindow = () => {
   const { user, logout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedModel, setSelectedModel] = useState("gemini-2.5-flash-lite"); // default
 
   const getReply = async () => {
     setLoading(true);
     setNewChat(false);
-    
+
     const token = localStorage.getItem('token');
     const options = {
       method: 'POST',
@@ -28,14 +30,15 @@ const ChatWindow = () => {
       },
       body: JSON.stringify({
         message: prompt,
-        threadId: currThreadId
+        threadId: currThreadId,
+        model: selectedModel
       })
     };
 
     try {
       const response = await fetch(`${serverURL}chat`, options);
       const rep = await response.json();
-      
+
       if (response.ok) {
         setReply(rep.reply);
         setPrevChats(prev => [
@@ -66,6 +69,7 @@ const ChatWindow = () => {
     <div className="window">
       <div className="navbar">
         <p> DevMate <i className="fa-solid fa-angle-down"></i></p>
+        <ModelSelector selectedModel={selectedModel} onModelChange={setSelectedModel} />
         <div className='user' onClick={handleProfileClick}>
           <i className="fa-solid fa-user"></i>
           <span className="user-name">{user?.name}</span>
@@ -90,12 +94,12 @@ const ChatWindow = () => {
       <ScaleLoader color="#fff" loading={loading} />
       <div className="message">
         <div className="ask">
-          <input 
-            type="text" 
-            placeholder='Ask Anything' 
-            value={prompt} 
-            onChange={(e) => setPrompt(e.target.value)} 
-            onKeyDown={(e) => e.key === 'Enter' ? getReply() : null} 
+          <input
+            type="text"
+            placeholder='Ask Anything'
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' ? getReply() : null}
           />
           <button onClick={getReply}><i className="fa-solid fa-paper-plane"></i></button>
         </div>

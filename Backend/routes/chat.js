@@ -51,7 +51,7 @@ router.delete('/threads/:threadId', async (req, res) => {
 
 // New message to existing chat thread or a new chat thread - ALWAYS LINK TO USER
 router.post('/chat', async (req, res) => {
-    const { threadId, message } = req.body;
+    const { threadId, message, model = "gemini-2.0-flash" } = req.body;
 
     if (!threadId || !message) {
         return res.status(400).json({ error: "Fields are required" });
@@ -64,7 +64,7 @@ router.post('/chat', async (req, res) => {
             // Create new thread WITH USER REFERENCE
             thread = new Thread({
                 threadId,
-                title: message,
+                title: message.substring(0, 50) + (message.length > 50 ? "..." : ""),
                 user: req.user._id, // ADD THIS
                 messages: [{
                     role: "user",
@@ -80,7 +80,7 @@ router.post('/chat', async (req, res) => {
             });
         }
 
-        const geminiReply = await geminiResponse(message, threadId);
+        const geminiReply = await geminiResponse(message, threadId, model);
         console.log("Gemini Reply:", geminiReply);
 
         thread.messages.push({

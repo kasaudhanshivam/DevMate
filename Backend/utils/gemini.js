@@ -7,12 +7,12 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEN_API_KEY
 });
 
-// Store conversation history per thread
+// Store conversation history per thread (shared across all models)
 const conversationHistory = new Map();
 
-const geminiResponse = async (message, threadId) => {
+const geminiResponse = async (message, threadId, modelName = "gemini-2.0-flash-lite") => {
     try {
-        // Get or initialize history for this thread
+        // Get or initialize history for this thread (shared across models)
         let history = conversationHistory.get(threadId) || [];
         
         // Add the new user message to history
@@ -21,10 +21,10 @@ const geminiResponse = async (message, threadId) => {
             parts: [{ text: message }]
         });
 
-        console.log(`Sending ${history.length} messages to Gemini`);
+        console.log(`Sending ${history.length} messages to ${modelName}`);
 
         const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
+            model: modelName,
             contents: history,
         });
 
@@ -36,7 +36,7 @@ const geminiResponse = async (message, threadId) => {
             parts: [{ text: reply }]
         });
 
-        // Limit history to prevent token overflow (keep last 20 messages)
+        // Limit history to prevent token overflow
         if (history.length > 20) {
             history = history.slice(-20);
         }
@@ -46,23 +46,11 @@ const geminiResponse = async (message, threadId) => {
         return reply;
 
     } catch (error) {
-        console.error("Error calling Gemini:", error);
-        
-        // Fallback to basic call without history
-        try {
-            const response = await ai.models.generateContent({
-                model: "gemini-2.0-flash",
-                contents: message, // Just send the string directly
-            });
-            return response.text;
-        } catch (fallbackError) {
-            console.error("Fallback also failed:", fallbackError);
-            return "I'm having trouble processing your request. Please try again.";
-        }
+        console.error(`Error calling ${modelName}:`, error);
+        return `I'm having trouble with ${modelName} or it may be too old. Please try another model or try again.`;
     }
 }
 
-// Clear history when switching threads or creating new chat
 export const clearChatHistory = (threadId) => {
     conversationHistory.delete(threadId);
     console.log(`Cleared history for thread: ${threadId}`);
