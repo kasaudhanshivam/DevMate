@@ -46,7 +46,7 @@ DevMate maintains **conversation continuity** across model switches using a smar
 ## ⚙️ System Architecture  
 
 <p align="center">
-  <img src="" alt="DevMate System Architecture" width="700">
+  <img src="./DevMate Architecture.png" alt="DevMate System Architecture" width="700">
 </p>
 
 ---
@@ -187,10 +187,6 @@ Frontend → http://localhost:5173
 Backend → http://localhost:8000
 
 ## Future Enhancements
-
-DevMate is designed with scalability, personalization, and extensibility in mind.  
-Below are the planned upgrades and advanced modules aimed at enhancing its intelligence, usability, and developer experience:  
-
 - **Document Intelligence Module** — Allow users to upload files (PDFs, Docs, or Text) and chat with their contents, enabling context-driven responses using embedded document vectors.
 - **Voice & Speech Integration** — Add speech-to-text and text-to-speech capabilities for hands-free AI interaction and accessibility support.  
 - **Dockerized Cloud Deployment** — Offer containerized deployment with Nginx proxy and CI/CD pipelines for production scalability.
