@@ -81,7 +81,7 @@ router.post('/chat', async (req, res) => {
         }
 
         const geminiReply = await geminiResponse(message, threadId, model);
-        console.log("Gemini Reply:", geminiReply);
+        // console.log("Gemini Reply:", geminiReply);
 
         thread.messages.push({
             role: "assistant",
