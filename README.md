@@ -212,3 +212,6 @@ If you’d like to add new features or fix bugs:
 **Shivam Kasaudhan**  
 If you like this project, don’t forget to **⭐ star the repo** on GitHub!  
 _Think, Build, and Chat — smarter with DevMate._
+
+## License
+This project is licensed under the MIT License — see the LICENSE file for details.
