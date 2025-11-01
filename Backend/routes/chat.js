@@ -1,6 +1,6 @@
 import express from 'express';
 import Thread from '../models/Thread.js';
-import geminiResponse from '../utils/gemini.js';
+import geminiResponse, {clearChatHistory} from '../utils/gemini.js';
 import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -71,6 +71,8 @@ router.post('/chat', async (req, res) => {
                     content: message
                 }]
             });
+
+            clearChatHistory(threadId);
         } else {
             thread.messages.push({
                 role: "user",
@@ -78,7 +80,7 @@ router.post('/chat', async (req, res) => {
             });
         }
 
-        const geminiReply = await geminiResponse(message);
+        const geminiReply = await geminiResponse(message, threadId);
         console.log("Gemini Reply:", geminiReply);
 
         thread.messages.push({
