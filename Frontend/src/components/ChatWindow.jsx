@@ -100,6 +100,7 @@ const ChatWindow = () => {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' ? getReply() : null}
+            id='ask-here'
           />
           <button onClick={getReply}><i className="fa-solid fa-paper-plane"></i></button>
         </div>
